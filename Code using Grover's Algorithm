@@ -1,0 +1,32 @@
+import random 
+import numpy as np 
+# Importing standard Qiskit libraries 
+from qiskit import QuantumCircuit, transpile 
+from qiskit_aer import AerSimulator 
+from qiskit.visualization import plot_histogram 
+from qiskit.circuit.library import MCMT 
+from math import sqrt, pow, pi
+from qiskit.quantum_info import Statevector 
+# Lets say we have 8 companies and we have to find the stock ticker symbol for: 
+# ["Apple": {AAPL = 0}, “Yahoo”: {YHOO = 1}, “Amazon”: {AMZN = 2}, 
+# “Microsoft”: {MSFT = 3} , “Meta Platforms Inc”: {META = 4},  
+# “International Business Machines”: {IBM = 5}, “Dell Technologies”: {DELL = 6},  
+# “Alphabet”: {GOOG = 7}  
+# Let's assume the stock symbols are represented by the numbers defined from 0-7  
+secret = random.randint(0,7)  # the expected(winner) stock ticker symbol is randomly picked  
+secret_string = format(secret, '03b')   
+print(f"{secret_string}")# format the stock ticker symbol in 3-bit string
+oracle = Statevector.from_label(secret_string)  # let the oracle know the winner stock ticker 
+symbol 
+print(oracle) 
+from qiskit_algorithms import AmplificationProblem 
+problem = AmplificationProblem(oracle, is_good_state=secret_string) 
+rom qiskit_algorithms import Grover 
+grover_circuits = [] 
+for iteration in range(1,3): 
+grover = Grover(iterations=iteration) 
+circuit = grover.construct_circuit(problem) 
+circuit.measure_all() 
+grover_circuits.append(circuit) 
+# Grover's circuit with 1 iteration 
+grover_circuits[0].draw()  
